@@ -1,4 +1,4 @@
-package pe.edu.unmsm.fisi.upg.ads.dirtycode.exceptions;
+package pe.edu.unmsm.fisi.upg.ads.cleancode.exceptions;
 
 import java.io.Serializable;
 

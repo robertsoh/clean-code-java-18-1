@@ -82,3 +82,4 @@ local.properties
 build/
 target/
 bin/
+.idea/

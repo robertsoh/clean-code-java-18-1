@@ -1,4 +1,4 @@
-package pe.edu.unmsm.fisi.upg.ads.dirtycode.domain;
+package pe.edu.unmsm.fisi.upg.ads.cleancode.domain;
 
 import static org.junit.Assert.assertNotNull;
 
@@ -7,9 +7,9 @@ import java.util.Arrays;
 
 import org.junit.Test;
 
-import pe.edu.unmsm.fisi.upg.ads.dirtycode.exceptions.SpeakerDoesntMeetRequirementsException;
-import pe.edu.unmsm.fisi.upg.ads.dirtycode.exceptions.NoSessionsApprovedException;
-import pe.edu.unmsm.fisi.upg.ads.dirtycode.infrastructure.SqlServerRepository;
+import pe.edu.unmsm.fisi.upg.ads.cleancode.exceptions.SpeakerDoesntMeetRequirementsException;
+import pe.edu.unmsm.fisi.upg.ads.cleancode.exceptions.NoSessionsApprovedException;
+import pe.edu.unmsm.fisi.upg.ads.cleancode.infrastructure.SqlServerRepository;
 
 public class SpeakerTest {
 	private SqlServerRepository repository = new SqlServerRepository(); // Hard coding to single concrete implementation for simplicity here.
@@ -113,7 +113,7 @@ public class SpeakerTest {
 		speaker.setEmployer("Example Employer");
 		speaker.setHasBlog(true);
 		speaker.setBrowser(new WebBrowser("test", 1));
-		speaker.setExp(1);
+		speaker.setExperienceYears(1);
 		speaker.setCertifications(new ArrayList<String>());
 		speaker.setBlogURL("");
 		speaker.setSessions(Arrays.asList(new Session("test title", "test description")));

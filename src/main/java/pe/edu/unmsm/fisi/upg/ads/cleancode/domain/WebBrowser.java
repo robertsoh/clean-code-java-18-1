@@ -1,4 +1,4 @@
-package pe.edu.unmsm.fisi.upg.ads.dirtycode.domain;
+package pe.edu.unmsm.fisi.upg.ads.cleancode.domain;
 
 public class WebBrowser {
 	private BrowserName name;
