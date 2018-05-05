@@ -38,10 +38,42 @@ public class Speaker {
 	    return isApproved;
     }
 
+    private boolean evaluateSession() {
+	    boolean isApprovedSession = false;
+        String[] oldTechnologies = new String[] { "Cobol", "Punch Cards", "Commodore", "VBScript" };
+
+        for ( Session session : this.sessions ) {
+            if( oldTechnologies.contains(session.getTitle()) || oldTechnologies.contains(session.getDescription()) ){
+                session.setApproved(false);
+            } else {
+                session.setApproved(true);
+                isApprovedSession = true;
+            }
+        }
+
+        return isApprovedSession;
+    }
+
+    private void evaluateRegistrationFee() {
+        if (this.experienceYears <= 1) {
+            this.registrationFee = 500;
+        }
+        else if (this.experienceYears >= 2 && this.experienceYears <= 3) {
+            this.registrationFee = 250;
+        }
+        else if (this.experienceYears >= 4 && this.experienceYears <= 5) {
+            this.registrationFee = 100;
+        }
+        else if (this.experienceYears >= 6 && this.experienceYears <= 9) {
+            this.registrationFee = 50;
+        }
+        else {
+            this.registrationFee = 0;
+        }
+    }
+
 	public Integer register(IRepository repository) throws Exception {
-		Integer speakerId = null;
-		boolean appr = false;
-		String[] oldTechnologies = new String[] { "Cobol", "Punch Cards", "Commodore", "VBScript" };
+		Integer speakerId;
 
 		if (this.firstName.isEmpty()) {
 			throw new IllegalArgumentException("First Name is required");
@@ -52,57 +84,21 @@ public class Speaker {
 		if (this.email.isEmpty()) {
 			throw new IllegalArgumentException("Email is required.");
 		}
-
 		if ( !this.isApprovedSpeaker() ){
             throw new SpeakerDoesntMeetRequirementsException("Speaker doesn't meet our abitrary and capricious standards.");
-        } else {
-            if (this.sessions.size() != 0) {
-                for (Session session : sessions) {
-                    for (String tech : oldTechnologies) {
-                        if (session.getTitle().contains(tech) || session.getDescription().contains(tech)) {
-                            session.setApproved(false);
-                            break;
-                        } else {
-                            session.setApproved(true);
-                            appr = true;
-                        }
-                    }
+        }
+        if (this.sessions.size() == 0) {
+            throw new IllegalArgumentException("Can't register speaker with no sessions to present.");
+        }
+        if (!this.evaluateSession()) {
+            throw new NoSessionsApprovedException("No sessions approved.");
+        }
+        this.evaluateRegistrationFee();
 
-                }
-            } else {
-                throw new IllegalArgumentException("Can't register speaker with no sessions to present.");
-            }
-
-            if (appr) {
-                //if we got this far, the speaker is approved
-                //let's go ahead and register him/her now.
-                //First, let's calculate the registration fee.
-                //More experienced speakers pay a lower fee.
-                if (this.experienceYears <= 1) {
-                    this.registrationFee = 500;
-                }
-                else if (experienceYears >= 2 && experienceYears <= 3) {
-                    this.registrationFee = 250;
-                }
-                else if (experienceYears >= 4 && experienceYears <= 5) {
-                    this.registrationFee = 100;
-                }
-                else if (experienceYears >= 6 && experienceYears <= 9) {
-                    this.registrationFee = 50;
-                }
-                else {
-                    this.registrationFee = 0;
-                }
-
-                //Now, save the speaker and sessions to the db.
-                try {
-                    speakerId = repository.saveSpeaker(this);
-                } catch (Exception e) {
-                    //in case the db call fails
-                }
-            } else {
-                throw new NoSessionsApprovedException("No sessions approved.");
-            }
+        try {
+            speakerId = repository.saveSpeaker(this);
+        } catch (Exception e) {
+            speakerId = null;
         }
 
 		return speakerId;

@@ -1,6 +1,5 @@
 package pe.edu.unmsm.fisi.upg.ads.cleancode.exceptions;
 
-import java.io.Serializable;
 
 public class SpeakerDoesntMeetRequirementsException extends Exception implements Serializable {
 
